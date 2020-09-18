@@ -65,7 +65,7 @@ namespace TimeBot
 
             await _client.LoginAsync(TokenType.Bot, SecurityInfo.token);
             await _client.StartAsync();
-            await _client.SetGameAsync("@Time Bot help", null, ActivityType.Listening);
+            await _client.SetGameAsync("the time", null, ActivityType.Listening);
 
             IServiceProvider _services = new ServiceCollection().BuildServiceProvider();
             _handler = new CommandHandler(_client, _services);

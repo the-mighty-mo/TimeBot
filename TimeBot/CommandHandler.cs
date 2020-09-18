@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Threading.Tasks;
+using TimeBot.Modules;
 
 namespace TimeBot
 {
@@ -16,6 +17,7 @@ namespace TimeBot
         private readonly DiscordSocketClient _client;
         private readonly CommandService _commands;
         private readonly IServiceProvider _services;
+        private readonly TimeEventHandler _time;
 
         public CommandHandler(DiscordSocketClient client, IServiceProvider services)
         {
@@ -27,6 +29,8 @@ namespace TimeBot
                 DefaultRunMode = RunMode.Async
             };
             _commands = new CommandService(config);
+
+            _time = new TimeEventHandler();
         }
 
         public async Task InitCommandsAsync()
@@ -34,6 +38,9 @@ namespace TimeBot
             _client.Connected += SendConnectMessage;
             _client.Disconnected += SendDisconnectError;
             _client.MessageReceived += HandleCommandAsync;
+
+            _time.Time += SendTimeMessageAsync;
+            _ = _time.StartProcess();
 
             await _commands.AddModulesAsync(Assembly.GetEntryAssembly(), _services);
             _commands.CommandExecuted += SendErrorAsync;
@@ -60,6 +67,18 @@ namespace TimeBot
             if (Program.isConsole)
             {
                 await Console.Out.WriteLineAsync(e.Message);
+            }
+        }
+
+        private async Task SendTimeMessageAsync()
+        {
+            foreach (SocketGuild g in _client.Guilds)
+            {
+                SocketTextChannel channel = await SetChannel.GetTimeChannelAsync(g);
+                if (channel != null)
+                {
+                    await channel.SendMessageAsync("Time");
+                } 
             }
         }
 
