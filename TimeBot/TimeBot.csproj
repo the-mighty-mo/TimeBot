@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <Nullable>warnings</Nullable>
+    <PackageId>Time Bot</PackageId>
+    <Authors>Josedolf Staller</Authors>
+    <Company>Josedolf Staller Enterprises</Company>
+    <Product>Time Bot</Product>
+    <Description>Discord bot that says "Time" at 2:17 every day</Description>
+    <Copyright>Copyright © The Mighty Mi® 2020</Copyright>
+    <ApplicationIcon>thunderchickens.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Discord.Net" Version="2.2.0" />
+  </ItemGroup>
+
+</Project>
