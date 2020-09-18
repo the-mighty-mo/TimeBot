@@ -86,7 +86,7 @@ namespace TimeBot
             await cnChannels.OpenAsync();
 
             List<Task> cmds = new List<Task>();
-            using (SqliteCommand cmd = new SqliteCommand("CREATE TABLE IF NOT EXISTS Channels (guild_id TEXT PRIMARY KEY, channel_id TEXT NOT NULL);"))
+            using (SqliteCommand cmd = new SqliteCommand("CREATE TABLE IF NOT EXISTS Channels (guild_id TEXT PRIMARY KEY, channel_id TEXT NOT NULL);", cnChannels))
             {
                 cmds.Add(cmd.ExecuteNonQueryAsync());
             }
