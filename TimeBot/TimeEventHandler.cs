@@ -19,10 +19,7 @@ namespace TimeBot
                 TimeSpan timeUntilTarget = targetTime - DateTime.Now;
 
                 await Task.Delay(timeUntilTarget);
-                if (Time != null)
-                {
-                    await Time.Invoke();
-                }
+                await Time();
             }
         }
     }
