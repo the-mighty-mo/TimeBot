@@ -40,7 +40,7 @@ namespace TimeBot
             _client.MessageReceived += HandleCommandAsync;
 
             _time.Time += SendTimeMessageAsync;
-            _ = _time.StartProcess();
+            _time.StartProcess();
 
             await _commands.AddModulesAsync(Assembly.GetEntryAssembly(), _services);
             _commands.CommandExecuted += SendErrorAsync;

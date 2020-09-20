@@ -7,7 +7,7 @@ namespace TimeBot
     {
         public event Func<Task> Time;
 
-        public async Task StartProcess()
+        public async void StartProcess()
         {
             while (true)
             {
