@@ -16,7 +16,13 @@ namespace TimeBot
                 {
                     targetTime = targetTime.AddHours(12);
                 }
+
                 TimeSpan timeUntilTarget = targetTime - DateTime.Now;
+                while (timeUntilTarget >= TimeSpan.FromSeconds(2))
+                {
+                    await Task.Delay(TimeSpan.FromSeconds(1));
+                    timeUntilTarget = targetTime - DateTime.Now;
+                }
 
                 await Task.Delay(timeUntilTarget);
                 await Time();
