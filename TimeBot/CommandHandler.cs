@@ -30,7 +30,7 @@ namespace TimeBot
             };
             _commands = new CommandService(config);
 
-            _time = new TimeEventHandler();
+            _time = new TimeEventHandler(new TimeSpan(2, 17, 00));
         }
 
         public async Task InitCommandsAsync()
