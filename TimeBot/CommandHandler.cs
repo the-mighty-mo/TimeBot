@@ -40,6 +40,7 @@ namespace TimeBot
             _client.MessageReceived += HandleCommandAsync;
 
             _time.Time += SendTimeMessageAsync;
+            _time.TimeEventError += HandleTimeEventErrorAsync;
             _time.StartProcess();
 
             await _commands.AddModulesAsync(Assembly.GetEntryAssembly(), _services);
@@ -80,6 +81,11 @@ namespace TimeBot
                     await channel.SendMessageAsync("Time");
                 } 
             }
+        }
+
+        private async Task HandleTimeEventErrorAsync(Exception e)
+        {
+            await Task.Run(() => Console.WriteLine("Error: Time message failed (see below).\n" + e.Message));
         }
 
         private async Task HandleCommandAsync(SocketMessage m)

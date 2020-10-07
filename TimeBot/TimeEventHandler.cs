@@ -11,6 +11,8 @@ namespace TimeBot
 
         public event Func<Task> Time;
 
+        public event Func<Exception, Task> TimeEventError;
+
         public async void StartProcess()
         {
             while (true)
@@ -21,12 +23,24 @@ namespace TimeBot
                     targetTime = targetTime.AddHours(12);
                 }
 
-                while (targetTime - DateTime.Now >= TimeSpan.FromSeconds(3))
+                TimeSpan timeLeft;
+                while ((timeLeft = targetTime - DateTime.Now) >= TimeSpan.FromSeconds(2))
                 {
                     await Task.Delay(TimeSpan.FromSeconds(1));
                 }
-                await Task.Delay(targetTime - DateTime.Now);
-                await Time();
+                if (timeLeft > TimeSpan.Zero)
+                {
+                    await Task.Delay(timeLeft);
+                }
+
+                try
+                {
+                    await Time();
+                }
+                catch (Exception e)
+                {
+                    await TimeEventError(e);
+                }
             }
         }
     }
