@@ -7,21 +7,21 @@ namespace TimeBot.Databases
 {
     public class ChannelsDatabase
     {
-        private readonly SqliteConnection cnChannels = new SqliteConnection("Filename=Channels.db");
+        private readonly SqliteConnection connection = new SqliteConnection("Filename=Channels.db");
 
-        public ChannelsTable Channels;
+        public readonly ChannelsTable Channels;
 
         public ChannelsDatabase()
         {
-            Channels = new ChannelsTable(cnChannels);
+            Channels = new ChannelsTable(connection);
         }
 
         public async Task InitAsync()
         {
-            await cnChannels.OpenAsync();
+            await connection.OpenAsync();
 
             List<Task> cmds = new List<Task>();
-            using (SqliteCommand cmd = new SqliteCommand("CREATE TABLE IF NOT EXISTS Channels (guild_id TEXT PRIMARY KEY, channel_id TEXT NOT NULL);", cnChannels))
+            using (SqliteCommand cmd = new SqliteCommand("CREATE TABLE IF NOT EXISTS Channels (guild_id TEXT PRIMARY KEY, channel_id TEXT NOT NULL);", connection))
             {
                 cmds.Add(cmd.ExecuteNonQueryAsync());
             }
@@ -29,20 +29,20 @@ namespace TimeBot.Databases
             await Task.WhenAll(cmds);
         }
 
-        public async Task CloseAsync() => await cnChannels.CloseAsync();
+        public async Task CloseAsync() => await connection.CloseAsync();
 
         public class ChannelsTable
         {
-            private readonly SqliteConnection cnChannels;
+            private readonly SqliteConnection connection;
 
-            public ChannelsTable(SqliteConnection cnChannels) => this.cnChannels = cnChannels;
+            public ChannelsTable(SqliteConnection connection) => this.connection = connection;
 
             public async Task<SocketTextChannel> GetTimeChannelAsync(SocketGuild g)
             {
                 SocketTextChannel channel = null;
 
                 string getChannel = "SELECT channel_id FROM Channels WHERE guild_id = @guild_id;";
-                using (SqliteCommand cmd = new SqliteCommand(getChannel, cnChannels))
+                using (SqliteCommand cmd = new SqliteCommand(getChannel, connection))
                 {
                     cmd.Parameters.AddWithValue("@guild_id", g.Id.ToString());
 
@@ -63,7 +63,7 @@ namespace TimeBot.Databases
                 string update = "UPDATE Channels SET channel_id = @channel_id WHERE guild_id = @guild_id;";
                 string insert = "INSERT INTO Channels (guild_id, channel_id) SELECT @guild_id, @channel_id WHERE (SELECT Changes() = 0);";
 
-                using (SqliteCommand cmd = new SqliteCommand(update + insert, cnChannels))
+                using (SqliteCommand cmd = new SqliteCommand(update + insert, connection))
                 {
                     cmd.Parameters.AddWithValue("@guild_id", channel.Guild.Id.ToString());
                     cmd.Parameters.AddWithValue("@channel_id", channel.Id.ToString());
@@ -74,7 +74,7 @@ namespace TimeBot.Databases
             public async Task RemoveTimeChannelAsync(SocketGuild g)
             {
                 string delete = "DELETE FROM Channels WHERE guild_id = @guild_id;";
-                using (SqliteCommand cmd = new SqliteCommand(delete, cnChannels))
+                using (SqliteCommand cmd = new SqliteCommand(delete, connection))
                 {
                     cmd.Parameters.AddWithValue("@guild_id", g.Id.ToString());
                     await cmd.ExecuteNonQueryAsync();
