@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Threading.Tasks;
-using TimeBot.Modules;
+using static TimeBot.DatabaseManager;
 
 namespace TimeBot
 {
@@ -14,37 +14,37 @@ namespace TimeBot
         public const string prefix = "\\";
         public static int argPos = 0;
 
-        private readonly DiscordSocketClient _client;
-        private readonly CommandService _commands;
-        private readonly IServiceProvider _services;
-        private readonly TimeEventHandler _time;
+        private readonly DiscordSocketClient client;
+        private readonly CommandService commands;
+        private readonly IServiceProvider services;
+        private readonly TimeEventHandler time;
 
         public CommandHandler(DiscordSocketClient client, IServiceProvider services)
         {
-            _client = client;
-            _services = services;
+            this.client = client;
+            this.services = services;
 
             CommandServiceConfig config = new CommandServiceConfig()
             {
                 DefaultRunMode = RunMode.Async
             };
-            _commands = new CommandService(config);
+            commands = new CommandService(config);
 
-            _time = new TimeEventHandler(new TimeSpan(2, 17, 00));
+            time = new TimeEventHandler(new TimeSpan(2, 17, 00));
         }
 
         public async Task InitCommandsAsync()
         {
-            _client.Connected += SendConnectMessage;
-            _client.Disconnected += SendDisconnectError;
-            _client.MessageReceived += HandleCommandAsync;
+            client.Connected += SendConnectMessage;
+            client.Disconnected += SendDisconnectError;
+            client.MessageReceived += HandleCommandAsync;
 
-            _time.Time += SendTimeMessageAsync;
-            _time.TimeEventError += HandleTimeEventErrorAsync;
-            _time.StartProcess();
+            time.Time += SendTimeMessageAsync;
+            time.TimeEventError += HandleTimeEventErrorAsync;
+            time.StartProcess();
 
-            await _commands.AddModulesAsync(Assembly.GetEntryAssembly(), _services);
-            _commands.CommandExecuted += SendErrorAsync;
+            await commands.AddModulesAsync(Assembly.GetEntryAssembly(), services);
+            commands.CommandExecuted += SendErrorAsync;
         }
 
         private async Task SendErrorAsync(Optional<CommandInfo> info, ICommandContext context, IResult result)
@@ -57,25 +57,19 @@ namespace TimeBot
 
         private async Task SendConnectMessage()
         {
-            if (Program.isConsole)
-            {
-                await Console.Out.WriteLineAsync($"{SecurityInfo.botName} is online");
-            }
+            await Console.Out.WriteLineAsync($"{SecurityInfo.botName} is online");
         }
 
         private async Task SendDisconnectError(Exception e)
         {
-            if (Program.isConsole)
-            {
-                await Console.Out.WriteLineAsync(e.Message);
-            }
+            await Console.Out.WriteLineAsync(e.Message);
         }
 
         private async Task SendTimeMessageAsync()
         {
-            foreach (SocketGuild g in _client.Guilds)
+            foreach (SocketGuild g in client.Guilds)
             {
-                SocketTextChannel channel = await SetChannel.GetTimeChannelAsync(g);
+                SocketTextChannel channel = await channelsDatabase.GetTimeChannelAsync(g);
                 if (channel != null)
                 {
                     await channel.SendMessageAsync("Time");
@@ -88,22 +82,25 @@ namespace TimeBot
             await Task.Run(() => Console.WriteLine("Error: Time message failed (see below).\n" + e.Message));
         }
 
+        private async Task<bool> CanBotRunCommandsAsync(SocketUserMessage msg) => await Task.Run(() => false);
+        private async Task<bool> ShouldDeleteBotCommands() => await Task.Run(() => true);
+
         private async Task HandleCommandAsync(SocketMessage m)
         {
-            if (!(m is SocketUserMessage msg) || (msg.Author.IsBot && msg.Author.Id != _client.CurrentUser.Id))
+            if (!(m is SocketUserMessage msg) || (msg.Author.IsBot && !await CanBotRunCommandsAsync(msg)))
             {
                 return;
             }
 
-            SocketCommandContext Context = new SocketCommandContext(_client, msg);
-            bool isCommand = msg.HasMentionPrefix(_client.CurrentUser, ref argPos) || msg.HasStringPrefix(prefix, ref argPos);
+            SocketCommandContext Context = new SocketCommandContext(client, msg);
+            bool isCommand = msg.HasMentionPrefix(client.CurrentUser, ref argPos) || msg.HasStringPrefix(prefix, ref argPos);
 
             if (isCommand)
             {
-                var result = await _commands.ExecuteAsync(Context, argPos, _services);
+                var result = await commands.ExecuteAsync(Context, argPos, services);
 
                 List<Task> cmds = new List<Task>();
-                if (msg.Author.IsBot)
+                if (msg.Author.IsBot && await ShouldDeleteBotCommands())
                 {
                     cmds.Add(msg.DeleteAsync());
                 }
