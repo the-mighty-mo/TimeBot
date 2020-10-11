@@ -5,7 +5,7 @@ namespace TimeBot
 {
     public static class DatabaseManager
     {
-        public static readonly ChannelsDatabase channelsDatabase;
+        public static readonly ChannelsDatabase channelsDatabase = new ChannelsDatabase();
 
         public static async Task InitAsync()
         {
