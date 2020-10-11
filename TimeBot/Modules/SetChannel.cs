@@ -13,7 +13,7 @@ namespace TimeBot.Modules
         [RequireUserPermission(GuildPermission.ManageGuild)]
         public async Task SetChannelAsync()
         {
-            if (await channelsDatabase.GetTimeChannelAsync(Context.Guild) == null)
+            if (await channelsDatabase.Channels.GetTimeChannelAsync(Context.Guild) == null)
             {
                 await Context.Channel.SendMessageAsync("You already do not have a channel set.");
                 return;
@@ -21,7 +21,7 @@ namespace TimeBot.Modules
 
             await Task.WhenAll
             (
-                channelsDatabase.RemoveTimeChannelAsync(Context.Guild),
+                channelsDatabase.Channels.RemoveTimeChannelAsync(Context.Guild),
                 Context.Channel.SendMessageAsync("\"Time\" messages will no longer be sent.")
             );
         }
@@ -31,7 +31,7 @@ namespace TimeBot.Modules
         [RequireUserPermission(GuildPermission.ManageGuild)]
         public async Task SetChannelAsync(SocketTextChannel channel)
         {
-            if (await channelsDatabase.GetTimeChannelAsync(Context.Guild) == channel)
+            if (await channelsDatabase.Channels.GetTimeChannelAsync(Context.Guild) == channel)
             {
                 await Context.Channel.SendMessageAsync($"{channel.Mention} is already configured for \"Time\" messages.");
                 return;
@@ -39,7 +39,7 @@ namespace TimeBot.Modules
 
             await Task.WhenAll
             (
-                channelsDatabase.SetTimeChannelAsync(channel),
+                channelsDatabase.Channels.SetTimeChannelAsync(channel),
                 Context.Channel.SendMessageAsync($"\"Time\" messages will now be sent to {channel.Mention}.")
             );
         }

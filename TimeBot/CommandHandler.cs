@@ -69,11 +69,11 @@ namespace TimeBot
         {
             foreach (SocketGuild g in client.Guilds)
             {
-                SocketTextChannel channel = await channelsDatabase.GetTimeChannelAsync(g);
+                SocketTextChannel channel = await channelsDatabase.Channels.GetTimeChannelAsync(g);
                 if (channel != null)
                 {
                     await channel.SendMessageAsync("Time");
-                } 
+                }
             }
         }
 
