@@ -11,8 +11,7 @@ namespace TimeBot.Modules
         {
             EmbedBuilder embed = new EmbedBuilder()
                 .WithColor(SecurityInfo.botColor)
-                .WithTitle(SecurityInfo.botName)
-                .WithCurrentTimestamp();
+                .WithTitle("Help");
 
             EmbedFieldBuilder prefix = new EmbedFieldBuilder()
                 .WithIsInline(false)

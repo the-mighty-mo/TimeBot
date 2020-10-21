@@ -15,14 +15,22 @@ namespace TimeBot.Modules
         {
             if (await channelsDatabase.Channels.GetTimeChannelAsync(Context.Guild) == null)
             {
-                await Context.Channel.SendMessageAsync("You already do not have a channel set.");
+                EmbedBuilder emb = new EmbedBuilder()
+                    .WithColor(SecurityInfo.botColor)
+                    .WithDescription("You already do not have a channel set.");
+
+                await Context.Channel.SendMessageAsync(embed: emb.Build());
                 return;
             }
+
+            EmbedBuilder embed = new EmbedBuilder()
+                .WithColor(SecurityInfo.botColor)
+                .WithDescription("\"Time\" messages will no longer be sent.");
 
             await Task.WhenAll
             (
                 channelsDatabase.Channels.RemoveTimeChannelAsync(Context.Guild),
-                Context.Channel.SendMessageAsync("\"Time\" messages will no longer be sent.")
+                Context.Channel.SendMessageAsync(embed: embed.Build())
             );
         }
 
@@ -33,14 +41,22 @@ namespace TimeBot.Modules
         {
             if (await channelsDatabase.Channels.GetTimeChannelAsync(Context.Guild) == channel)
             {
-                await Context.Channel.SendMessageAsync($"{channel.Mention} is already configured for \"Time\" messages.");
+                EmbedBuilder emb = new EmbedBuilder()
+                    .WithColor(SecurityInfo.botColor)
+                    .WithDescription($"{channel.Mention} is already configured for \"Time\" messages.");
+
+                await Context.Channel.SendMessageAsync(embed: emb.Build());
                 return;
             }
+
+            EmbedBuilder embed = new EmbedBuilder()
+                .WithColor(SecurityInfo.botColor)
+                .WithDescription($"\"Time\" messages will now be sent to {channel.Mention}.");
 
             await Task.WhenAll
             (
                 channelsDatabase.Channels.SetTimeChannelAsync(channel),
-                Context.Channel.SendMessageAsync($"\"Time\" messages will now be sent to {channel.Mention}.")
+                Context.Channel.SendMessageAsync(embed: embed.Build())
             );
         }
 
