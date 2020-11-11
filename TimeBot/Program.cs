@@ -1,11 +1,8 @@
 ﻿using Discord;
 using Discord.WebSocket;
-using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
