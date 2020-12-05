@@ -49,7 +49,7 @@ namespace TimeBot.Databases
                     SqliteDataReader reader = await cmd.ExecuteReaderAsync();
                     if (await reader.ReadAsync())
                     {
-                        ulong.TryParse(reader["channel_id"].ToString(), out ulong channelID);
+                        _ = ulong.TryParse(reader["channel_id"].ToString(), out ulong channelID);
                         channel = g.GetTextChannel(channelID);
                     }
                     reader.Close();
