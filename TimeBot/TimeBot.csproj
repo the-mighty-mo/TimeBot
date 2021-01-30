@@ -9,7 +9,7 @@
     <Company>Josedolf Staller Enterprises</Company>
     <Product>Time Bot</Product>
     <Description>Discord bot that says "Time" at 2:17 every day</Description>
-    <Copyright>Copyright © The Mighty Mi® 2020</Copyright>
+    <Copyright>Copyright © The Mighty Mi® 2021</Copyright>
     <ApplicationIcon>thunderchickens.ico</ApplicationIcon>
   </PropertyGroup>
 
@@ -23,7 +23,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Discord.Net" Version="2.2.0" />
+    <PackageReference Include="Discord.Net" Version="2.3.0" />
     <PackageReference Include="Microsoft.Data.Sqlite" Version="5.0.2" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.1" />
   </ItemGroup>
