@@ -33,13 +33,16 @@ namespace TimeBot
                     await Task.Delay(timeLeft);
                 }
 
-                try
+                if (timeLeft > TimeSpan.FromMinutes(-1))
                 {
-                    await Time();
-                }
-                catch (Exception e)
-                {
-                    await TimeEventError(e);
+                    try
+                    {
+                        await Time();
+                    }
+                    catch (Exception e)
+                    {
+                        await TimeEventError(e);
+                    }
                 }
             }
         }
