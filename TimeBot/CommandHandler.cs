@@ -24,7 +24,7 @@ namespace TimeBot
             this.client = client;
             this.services = services;
 
-            CommandServiceConfig config = new CommandServiceConfig()
+            CommandServiceConfig config = new()
             {
                 DefaultRunMode = RunMode.Async
             };
@@ -55,15 +55,11 @@ namespace TimeBot
             }
         }
 
-        private async Task SendConnectMessage()
-        {
+        private async Task SendConnectMessage() =>
             await Console.Out.WriteLineAsync($"{SecurityInfo.botName} is online");
-        }
 
-        private async Task SendDisconnectError(Exception e)
-        {
+        private async Task SendDisconnectError(Exception e) =>
             await Console.Out.WriteLineAsync(e.Message);
-        }
 
         private async Task SendTimeMessageAsync()
         {
@@ -77,10 +73,8 @@ namespace TimeBot
             }
         }
 
-        private async Task HandleTimeEventErrorAsync(Exception e)
-        {
+        private async Task HandleTimeEventErrorAsync(Exception e) =>
             await Task.Run(() => Console.WriteLine("Error: Time message failed (see below).\n" + e.Message));
-        }
 
         private async Task<bool> CanBotRunCommandsAsync(SocketUserMessage msg) => await Task.Run(() => false);
 
@@ -93,14 +87,14 @@ namespace TimeBot
                 return;
             }
 
-            SocketCommandContext Context = new SocketCommandContext(client, msg);
+            SocketCommandContext Context = new(client, msg);
             bool isCommand = msg.HasMentionPrefix(client.CurrentUser, ref argPos) || msg.HasStringPrefix(prefix, ref argPos);
 
             if (isCommand)
             {
                 var result = await commands.ExecuteAsync(Context, argPos, services);
 
-                List<Task> cmds = new List<Task>();
+                List<Task> cmds = new();
                 if (msg.Author.IsBot && await ShouldDeleteBotCommands())
                 {
                     cmds.Add(msg.DeleteAsync());

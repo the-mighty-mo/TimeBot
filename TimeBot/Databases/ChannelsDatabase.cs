@@ -7,15 +7,13 @@ namespace TimeBot.Databases
 {
     public class ChannelsDatabase
     {
-        private readonly SqliteConnection connection = new SqliteConnection("Filename=Channels.db");
-        private readonly Dictionary<System.Type, ITable> tables = new Dictionary<System.Type, ITable>();
+        private readonly SqliteConnection connection = new("Filename=Channels.db");
+        private readonly Dictionary<System.Type, ITable> tables = new();
 
         public ChannelsTable Channels => tables[typeof(ChannelsTable)] as ChannelsTable;
 
-        public ChannelsDatabase()
-        {
+        public ChannelsDatabase() =>
             tables.Add(typeof(ChannelsTable), new ChannelsTable(connection));
-        }
 
         public async Task InitAsync()
         {

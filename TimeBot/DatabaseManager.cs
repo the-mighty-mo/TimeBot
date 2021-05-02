@@ -5,20 +5,16 @@ namespace TimeBot
 {
     public static class DatabaseManager
     {
-        public static readonly ChannelsDatabase channelsDatabase = new ChannelsDatabase();
+        public static readonly ChannelsDatabase channelsDatabase = new();
 
-        public static async Task InitAsync()
-        {
+        public static async Task InitAsync() =>
             await Task.WhenAll(
                 channelsDatabase.InitAsync()
             );
-        }
 
-        public static async Task CloseAsync()
-        {
+        public static async Task CloseAsync() =>
             await Task.WhenAll(
                 channelsDatabase.CloseAsync()
             );
-        }
     }
 }
