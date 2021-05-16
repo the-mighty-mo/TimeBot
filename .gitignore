@@ -1,4 +1,4 @@
-TimeBot/bin/
-TimeBot/obj/
+**/bin/
+**/obj/
 .vs/
-*.user
+**.user
