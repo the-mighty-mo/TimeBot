@@ -74,7 +74,7 @@ namespace TimeBot
         }
 
         private async Task HandleTimeEventErrorAsync(Exception e) =>
-            await Task.Run(() => Console.WriteLine("Error: Time message failed (see below).\n" + e.Message));
+            await Console.Out.WriteLineAsync("Error: Time message failed (see below).\n" + e.Message);
 
         private async Task<bool> CanBotRunCommandsAsync(SocketUserMessage msg) => await Task.Run(() => false);
 
