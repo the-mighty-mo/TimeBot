@@ -1,7 +1,7 @@
 # Time Bot
 
 [![CodeFactor](https://www.codefactor.io/repository/github/the-mighty-mo/timebot/badge)](https://www.codefactor.io/repository/github/the-mighty-mo/timebot)
-[![Build Status](https://hallb1016.visualstudio.com/FBIBot/_apis/build/status/the-mighty-mo.TimeBot?branchName=master)](https://hallb1016.visualstudio.com/FBIBot/_build/latest?definitionId=9&branchName=master)
+[![.NET Build](https://github.com/the-mighty-mo/TimeBot/actions/workflows/dotnet.yml/badge.svg)](https://github.com/the-mighty-mo/TimeBot/actions/workflows/dotnet.yml)
 
 Time Bot - Version 1.0
 
