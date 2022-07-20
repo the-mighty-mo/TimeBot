@@ -55,11 +55,11 @@ namespace TimeBot
             }
         }
 
-        private async Task SendConnectMessage() =>
-            await Console.Out.WriteLineAsync($"{SecurityInfo.botName} is online");
+        private Task SendConnectMessage() =>
+            Console.Out.WriteLineAsync($"{SecurityInfo.botName} is online");
 
-        private async Task SendDisconnectError(Exception e) =>
-            await Console.Out.WriteLineAsync(e.Message);
+        private Task SendDisconnectError(Exception e) =>
+            Console.Out.WriteLineAsync(e.Message);
 
         private async Task SendTimeMessageAsync()
         {
@@ -73,10 +73,10 @@ namespace TimeBot
             }
         }
 
-        private async Task HandleTimeEventErrorAsync(Exception e) =>
-            await Console.Out.WriteLineAsync("Error: Time message failed (see below).\n" + e.Message);
+        private Task HandleTimeEventErrorAsync(Exception e) =>
+            Console.Out.WriteLineAsync("Error: Time message failed (see below).\n" + e.Message);
 
-        private async Task<bool> CanBotRunCommandsAsync(SocketUserMessage msg) => await Task.Run(() => false);
+        private Task<bool> CanBotRunCommandsAsync(SocketUserMessage msg) => Task.Run(() => false);
 
         private async Task<bool> ShouldDeleteBotCommands() => await Task.Run(() => true);
 

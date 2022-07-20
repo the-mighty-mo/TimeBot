@@ -47,7 +47,8 @@ namespace TimeBot
         {
             config = new DiscordSocketConfig
             {
-                AlwaysDownloadUsers = false
+                AlwaysDownloadUsers = false,
+                GatewayIntents = GatewayIntents.AllUnprivileged
             };
             client = new DiscordSocketClient(config);
 
