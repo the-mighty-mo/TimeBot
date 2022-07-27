@@ -78,7 +78,7 @@ namespace TimeBot
 
         private Task<bool> CanBotRunCommandsAsync(SocketUserMessage msg) => Task.Run(() => false);
 
-        private async Task<bool> ShouldDeleteBotCommands() => await Task.Run(() => true);
+        private Task<bool> ShouldDeleteBotCommands() => Task.Run(() => true);
 
         private async Task HandleCommandAsync(SocketMessage m)
         {

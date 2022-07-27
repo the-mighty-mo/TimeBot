@@ -7,13 +7,13 @@ namespace TimeBot
     {
         public static readonly ChannelsDatabase channelsDatabase = new();
 
-        public static async Task InitAsync() =>
-            await Task.WhenAll(
+        public static Task InitAsync() =>
+            Task.WhenAll(
                 channelsDatabase.InitAsync()
             );
 
-        public static async Task CloseAsync() =>
-            await Task.WhenAll(
+        public static Task CloseAsync() =>
+            Task.WhenAll(
                 channelsDatabase.CloseAsync()
             );
     }
