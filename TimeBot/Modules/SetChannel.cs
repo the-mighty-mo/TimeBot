@@ -9,6 +9,7 @@ namespace TimeBot.Modules
     public class SetChannel : InteractionModuleBase<SocketInteractionContext>
     {
         [SlashCommand("set-channel", "Sets the time channel")]
+        [RequireContext(ContextType.Guild)]
         [RequireUserPermission(GuildPermission.ManageGuild)]
         public async Task SetChannelAsync(SocketTextChannel channel = null)
         {
