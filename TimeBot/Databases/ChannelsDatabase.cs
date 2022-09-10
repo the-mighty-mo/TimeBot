@@ -10,7 +10,7 @@ namespace TimeBot.Databases
         private readonly SqliteConnection connection = new("Filename=Channels.db");
         private readonly Dictionary<System.Type, ITable> tables = new();
 
-        public ChannelsTable Channels => tables[typeof(ChannelsTable)] as ChannelsTable;
+        public ChannelsTable Channels => (tables[typeof(ChannelsTable)] as ChannelsTable)!;
 
         public ChannelsDatabase() =>
             tables.Add(typeof(ChannelsTable), new ChannelsTable(connection));

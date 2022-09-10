@@ -16,9 +16,9 @@ namespace TimeBot.Databases.ChannelsDatabaseTables
             return cmd.ExecuteNonQueryAsync();
         }
 
-        public async Task<SocketTextChannel> GetTimeChannelAsync(SocketGuild g)
+        public async Task<SocketTextChannel?> GetTimeChannelAsync(SocketGuild g)
         {
-            SocketTextChannel channel = null;
+            SocketTextChannel? channel = null;
 
             string getChannel = "SELECT channel_id FROM Channels WHERE guild_id = @guild_id;";
 

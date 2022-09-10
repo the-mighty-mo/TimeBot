@@ -11,7 +11,7 @@ namespace TimeBot.Modules
         [SlashCommand("set-channel", "Sets the time channel")]
         [RequireContext(ContextType.Guild)]
         [RequireUserPermission(GuildPermission.ManageGuild)]
-        public async Task SetChannelAsync(SocketTextChannel channel = null)
+        public async Task SetChannelAsync(SocketTextChannel? channel = null)
         {
             if (channel == null)
             {

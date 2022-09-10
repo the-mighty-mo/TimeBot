@@ -9,9 +9,9 @@ namespace TimeBot
 
         public TimeEventHandler(TimeSpan time) => this.time = time;
 
-        public event Func<Task> Time;
+        public event Func<Task>? Time;
 
-        public event Func<Exception, Task> TimeEventError;
+        public event Func<Exception, Task>? TimeEventError;
 
         public async void StartProcess()
         {
@@ -37,11 +37,17 @@ namespace TimeBot
                 {
                     try
                     {
-                        await Time();
+                        if (Time != null)
+                        {
+                            await Time();
+                        }
                     }
                     catch (Exception e)
                     {
-                        await TimeEventError(e);
+                        if (TimeEventError != null)
+                        {
+                            await TimeEventError(e);
+                        }
                     }
                 }
             }
