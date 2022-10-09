@@ -110,9 +110,9 @@ namespace TimeBot
         private Task HandleTimeEventErrorAsync(Exception e) =>
             Console.Out.WriteLineAsync("Error: Time message failed (see below).\n" + e.Message);
 
-        private static Task<bool> CanBotRunCommandsAsync(SocketUser usr) => Task.Run(() => false);
+        private static Task<bool> CanBotRunCommandsAsync(SocketUser usr) => Task.FromResult(false);
 
-        private static Task<bool> ShouldDeleteBotCommands() => Task.Run(() => true);
+        private static Task<bool> ShouldDeleteBotCommands() => Task.FromResult(true);
 
         private async Task HandleSlashCommandAsync(SocketSlashCommand m)
         {
