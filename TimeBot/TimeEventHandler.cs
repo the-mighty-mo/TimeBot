@@ -26,11 +26,11 @@ namespace TimeBot
                 TimeSpan timeLeft;
                 while ((timeLeft = targetTime - DateTime.Now) >= TimeSpan.FromSeconds(2))
                 {
-                    await Task.Delay(TimeSpan.FromSeconds(1));
+                    await Task.Delay(TimeSpan.FromSeconds(1)).ConfigureAwait(false);
                 }
                 if (timeLeft > TimeSpan.Zero)
                 {
-                    await Task.Delay(timeLeft);
+                    await Task.Delay(timeLeft).ConfigureAwait(false);
                 }
 
                 if (timeLeft > TimeSpan.FromMinutes(-1))
@@ -39,14 +39,14 @@ namespace TimeBot
                     {
                         if (Time != null)
                         {
-                            await Time();
+                            await Time().ConfigureAwait(false);
                         }
                     }
                     catch (Exception e)
                     {
                         if (TimeEventError != null)
                         {
-                            await TimeEventError(e);
+                            await TimeEventError(e).ConfigureAwait(false);
                         }
                     }
                 }

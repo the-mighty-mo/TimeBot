@@ -25,8 +25,8 @@ namespace TimeBot.Databases.ChannelsDatabaseTables
             using SqliteCommand cmd = new(getChannel, connection);
             cmd.Parameters.AddWithValue("@guild_id", g.Id.ToString());
 
-            SqliteDataReader reader = await cmd.ExecuteReaderAsync();
-            if (await reader.ReadAsync())
+            SqliteDataReader reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false);
+            if (await reader.ReadAsync().ConfigureAwait(false))
             {
                 _ = ulong.TryParse(reader["channel_id"].ToString(), out ulong channelID);
                 channel = g.GetTextChannel(channelID);
@@ -36,7 +36,7 @@ namespace TimeBot.Databases.ChannelsDatabaseTables
             return channel;
         }
 
-        public async Task SetTimeChannelAsync(SocketTextChannel channel)
+        public Task SetTimeChannelAsync(SocketTextChannel channel)
         {
             string update = "UPDATE Channels SET channel_id = @channel_id WHERE guild_id = @guild_id;";
             string insert = "INSERT INTO Channels (guild_id, channel_id) SELECT @guild_id, @channel_id WHERE (SELECT Changes() = 0);";
@@ -45,17 +45,17 @@ namespace TimeBot.Databases.ChannelsDatabaseTables
             cmd.Parameters.AddWithValue("@guild_id", channel.Guild.Id.ToString());
             cmd.Parameters.AddWithValue("@channel_id", channel.Id.ToString());
 
-            await cmd.ExecuteNonQueryAsync();
+            return cmd.ExecuteNonQueryAsync();
         }
 
-        public async Task RemoveTimeChannelAsync(SocketGuild g)
+        public Task RemoveTimeChannelAsync(SocketGuild g)
         {
             string delete = "DELETE FROM Channels WHERE guild_id = @guild_id;";
 
             using SqliteCommand cmd = new(delete, connection);
             cmd.Parameters.AddWithValue("@guild_id", g.Id.ToString());
 
-            await cmd.ExecuteNonQueryAsync();
+            return cmd.ExecuteNonQueryAsync();
         }
     }
 }

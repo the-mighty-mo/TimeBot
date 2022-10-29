@@ -11,27 +11,18 @@ namespace TimeBot.Modules
         [SlashCommand("set-channel", "Sets the time channel")]
         [RequireContext(ContextType.Guild)]
         [RequireUserPermission(GuildPermission.ManageGuild)]
-        public async Task SetChannelAsync(SocketTextChannel? channel = null)
-        {
-            if (channel == null)
-            {
-                await SetChannelPrivAsync();
-            }
-            else
-            {
-                await SetChannelPrivAsync(channel);
-            }
-        }
+        public Task SetChannelAsync(SocketTextChannel? channel = null) =>
+            channel == null ? SetChannelPrivAsync() : SetChannelPrivAsync(channel);
 
         public async Task SetChannelPrivAsync()
         {
-            if (await channelsDatabase.Channels.GetTimeChannelAsync(Context.Guild) == null)
+            if (await channelsDatabase.Channels.GetTimeChannelAsync(Context.Guild).ConfigureAwait(false) == null)
             {
                 EmbedBuilder emb = new EmbedBuilder()
                     .WithColor(SecurityInfo.botColor)
                     .WithDescription("You already do not have a channel set.");
 
-                await Context.Interaction.RespondAsync(embed: emb.Build());
+                await Context.Interaction.RespondAsync(embed: emb.Build()).ConfigureAwait(false);
                 return;
             }
 
@@ -43,18 +34,18 @@ namespace TimeBot.Modules
             (
                 channelsDatabase.Channels.RemoveTimeChannelAsync(Context.Guild),
                 Context.Interaction.RespondAsync(embed: embed.Build())
-            );
+            ).ConfigureAwait(false);
         }
 
         public async Task SetChannelPrivAsync(SocketTextChannel channel)
         {
-            if (await channelsDatabase.Channels.GetTimeChannelAsync(Context.Guild) == channel)
+            if (await channelsDatabase.Channels.GetTimeChannelAsync(Context.Guild).ConfigureAwait(false) == channel)
             {
                 EmbedBuilder emb = new EmbedBuilder()
                     .WithColor(SecurityInfo.botColor)
                     .WithDescription($"{channel.Mention} is already configured for \"Time\" messages.");
 
-                await Context.Interaction.RespondAsync(embed: emb.Build());
+                await Context.Interaction.RespondAsync(embed: emb.Build()).ConfigureAwait(false);
                 return;
             }
 
@@ -66,7 +57,7 @@ namespace TimeBot.Modules
             (
                 channelsDatabase.Channels.SetTimeChannelAsync(channel),
                 Context.Interaction.RespondAsync(embed: embed.Build())
-            );
+            ).ConfigureAwait(false);
         }
     }
 }
